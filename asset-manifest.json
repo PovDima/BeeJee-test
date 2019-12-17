@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/BeeJee-test/static/css/main.6a934dfc.chunk.css",
+    "main.js": "/BeeJee-test/static/js/main.989943bc.chunk.js",
+    "main.js.map": "/BeeJee-test/static/js/main.989943bc.chunk.js.map",
+    "runtime-main.js": "/BeeJee-test/static/js/runtime-main.86087f8f.js",
+    "runtime-main.js.map": "/BeeJee-test/static/js/runtime-main.86087f8f.js.map",
+    "static/js/2.b044c1dd.chunk.js": "/BeeJee-test/static/js/2.b044c1dd.chunk.js",
+    "static/js/2.b044c1dd.chunk.js.map": "/BeeJee-test/static/js/2.b044c1dd.chunk.js.map",
+    "index.html": "/BeeJee-test/index.html",
+    "precache-manifest.6dd2ab90cebba778b20d36c5fc18e361.js": "/BeeJee-test/precache-manifest.6dd2ab90cebba778b20d36c5fc18e361.js",
+    "service-worker.js": "/BeeJee-test/service-worker.js",
+    "static/css/main.6a934dfc.chunk.css.map": "/BeeJee-test/static/css/main.6a934dfc.chunk.css.map",
+    "static/js/2.b044c1dd.chunk.js.LICENSE": "/BeeJee-test/static/js/2.b044c1dd.chunk.js.LICENSE",
+    "static/media/LoginPage.less": "/BeeJee-test/static/media/LoginPage.d41d8cd9.less",
+    "static/media/styles.less": "/BeeJee-test/static/media/styles.fcf464e7.less"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.86087f8f.js",
+    "static/js/2.b044c1dd.chunk.js",
+    "static/css/main.6a934dfc.chunk.css",
+    "static/js/main.989943bc.chunk.js"
+  ]
+}
