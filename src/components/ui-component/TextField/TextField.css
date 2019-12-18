@@ -1,5 +1,3 @@
-@import '../../../assets/colors.less';
-
 .input {
     height: 44px;
 }
@@ -9,36 +7,38 @@
 }
 
 .wrapper {
-    // width: 100%;
     position: relative;
-    .counter {
-        position: absolute;
-        bottom: 5px;
-        right: 10px;
-        font-size: 12px;
-        color: @TEXT_SECONDARY;
-    }
 }
+
+.counter {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    font-size: 12px;
+    color: green
+}
+
 .root {
     height: 100%;
     font-size: 17px !important;
     line-height: 24px !important;
     font-weight: 400 !important;
-    border: 1px solid @DIVIDER !important;
+    border: 1px solid white !important;
     border-radius: 8px;
-    background-color: @INPUT_BG;
-    fieldset {
-        display: none;
-    }
-    &:hover {
-        border: 1px solid white !important;
-    }
-    &.error {
-        border: 1px solid @ERROR !important;
-    }
+    background-color: white;
+
 }
+
+.root:hover {
+    border: 1px solid white !important;
+}
+
+.error {
+    border: 1px solid red !important;
+}
+
 .helperTextRoot {
-    background: @ERROR;
+    background: red;
     padding: 4px 12px;
     font-family: Inter !important;
     font-size: 11px !important;
@@ -49,13 +49,14 @@
     position: absolute;
     bottom  : -23px;
 }
+
 .helperTextRoot::before {
     content : '';
     color: transparent !important;
     overflow: hidden;
     width: 0px;
     height: 0px;
-    border: 7px solid @ERROR;
+    border: 7px solid red;
     border-top-color: transparent;
     border-right-color: transparent;
     border-left-color: transparent;

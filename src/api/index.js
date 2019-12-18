@@ -1,5 +1,6 @@
 import ApiClient from './apiClient';
-import MessagesAPI from './Messages';
+import TasksAPI from './Tasks';
+import LoginAPI from './Login';
 
 export default function ({ apiPrefix } = {}) {
     if (!apiPrefix) {
@@ -10,6 +11,7 @@ export default function ({ apiPrefix } = {}) {
 
     return {
         apiClient: api,
-        messages: new MessagesAPI({ apiClient: api }),
+        login: new LoginAPI({ apiClient: api }),
+        tasks: new TasksAPI({ apiClient: api }),
     };
 }

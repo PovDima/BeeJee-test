@@ -1,23 +1,36 @@
 import React, { Component } from 'react';
-import api from './apiSingleton';
+import LoginPage from './components/pages/LoginPage';
+import TaskPage from './components/pages/TasksPage';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import * as LoginActions from './actions/login';
+
 import './App.css';
-import LoginPage from './components/pages/LoginPage'
+
 class App extends Component {
-  constructor() {
-    super()
+
+  static propTypes = {
+    isLogin: PropTypes.bool.isRequired,
+  };
+
+  async componentDidMount() {
+    await this.props.checkSession()
   }
 
   render() {
+    const { isLogin } = this.props
+
     return (
       <div className="App">
-        <LoginPage/>
+        {isLogin ?
+          <TaskPage />
+          : <LoginPage />
+        }
       </div>
     );
   }
 }
 
-export default App;
-async function main() {
-  await api.messages.getMessages()
-}
-main()
+export default connect(state => {
+  return { isLogin: state.login.isLogin }
+}, { ...LoginActions })(App);

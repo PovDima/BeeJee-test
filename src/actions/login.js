@@ -1,34 +1,30 @@
-import jwt          from 'jwt-simple';
-import api          from '../apiSingleton.js';
-//import { decodeErrorObject } from '../utils/validation';
+import api from '../apiSingleton.js';
 
-export const LOGIN  = 'LOGIN';
+export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 
-export function login(payload, onError) {
+export function login(data, onError) {
     return async dispatch => {
         try {
-            const { data: { jwt: token } } = await api.sessions.login(payload);
+            const response = await api.login.login(data);
+            if (response.status === 'ok') {
+                const { message: { token } } = response
 
-            const userData = jwt.decode(token, '', true);
-
-
-                api.apiClient.setToken(token);
                 localStorage.setItem('token', token);
 
                 dispatch({
-                    type    : LOGIN,
-                    payload : userData
+                    type: LOGIN,
                 });
-        } catch (err) {
-            //onError(decodeErrorObject({ ...err.fields }));
+            }
+
+        } catch (error) {
+            onError(error)
         }
     };
 }
 
 export function logout() {
     return dispatch => {
-        api.apiClient.setToken('');
         localStorage.setItem('token', '');
 
         dispatch({ type: LOGOUT });
@@ -41,20 +37,14 @@ export function checkSession() {
             const token = localStorage.getItem('token');
 
             if (!token) {
-              //  if (pathname !== ROUTES.login) 
-
                 return;
             }
-            api.apiClient.setToken(token);
-
-            const userData = jwt.decode(token, '', true);
 
             dispatch({
-                type    : LOGIN,
-                payload : userData
+                type: LOGIN,
             });
         } catch (err) {
-          console.log(err)
+            console.log(err)
         }
     };
 }

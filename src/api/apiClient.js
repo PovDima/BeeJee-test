@@ -1,6 +1,3 @@
-import { getFromLocalStorage } from '../utils/localStorageUtils';
-
-
 export default class ApiClient {
     constructor({ prefix = 'api/v1' } = {}) {
         this.prefix = prefix;
@@ -8,7 +5,7 @@ export default class ApiClient {
 
     get(requestUrl, params) {
         return this.request({
-            url   : requestUrl,
+            url: requestUrl,
             method: 'GET',
             params
         });
@@ -16,8 +13,9 @@ export default class ApiClient {
 
     post(requestUrl, body = {}, params) {
         return this.request({
-            url   : requestUrl,
+            url: requestUrl,
             method: 'POST',
+            type: 'test',
             body,
             params
         });
@@ -25,7 +23,7 @@ export default class ApiClient {
 
     put(requestUrl, body = {}, params) {
         return this.request({
-            url   : requestUrl,
+            url: requestUrl,
             method: 'PUT',
             body,
             params
@@ -34,7 +32,7 @@ export default class ApiClient {
 
     delete(requestUrl, body = {}, params) {
         return this.request({
-            url   : `${requestUrl}`,
+            url: `${requestUrl}`,
             method: 'DELETE',
             body,
             params
@@ -43,46 +41,62 @@ export default class ApiClient {
 
     patch(requestUrl, body = {}, params) {
         return this.request({
-            url   : `${requestUrl}`,
+            url: `${requestUrl}`,
             method: 'PATCH',
             body,
             params
         });
     }
 
-    async request({ url, method, body, isFormData, headers, signal }) {
-        const token = getFromLocalStorage('jwt');
+    getFormData(data) {
+        const formData = new FormData();
+        const token = localStorage.getItem('token');
+        
+        for (const name in data) {
+            formData.append(name, data[name]);
+        }
+
+        formData.append('token', token);
+
+        return formData;
+    }
+
+    async request({ url, method, body, isFormData, headers, signal, type, params }) {
         const init = {
             method,
             headers: headers || {
-                Accept        : 'application/json',
-                'Content-Type': 'application/json',
+                //...(!type ? { 'Content-Type': 'application/json' } : {}),
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Request-Headers': '*',
-                ...(token ? { 'X-AuthToken': token } : {})
+                'Access-Control-Allow-Credentials': true,
             },
             signal
         };
 
-        if (body && !isFormData) {
-            init.body = JSON.stringify(body);
-        } else {
-            init.body = body;
+        if (body) {
+            init.body = this.getFormData(body);
+        }
+
+        let newParams = '';
+
+        if (params) {
+            for (const param in params) {
+                newParams = `${newParams}&&${param}=${params[param]}`
+            }
         }
 
         try {
-            const response = await fetch(`${this.prefix}${url}`, init);
+            const response = await fetch(`https://cors-anywhere.herokuapp.com/${this.prefix}${url}${newParams}`, init);
+            const data = await response.json();
 
             if (response.status >= 400) {
                 throw new Error('Bad response from server');
             }
-            const data = await response.json();
 
-            if (data && data.status === 1) {
+            if (data && data.status === 'ok') {
                 return data;
             }
 
-            throw data.error;
+            throw data.message;
         } catch (err) {
             console.warn('Unhandled exeption');
             console.warn(err);

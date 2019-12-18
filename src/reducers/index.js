@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 
-import messages          from './messages';
+import tasks from './tasks';
+import login from './login';
 
 export default combineReducers({
-    messages
+    tasks,
+    login
 });

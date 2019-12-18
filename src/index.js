@@ -4,17 +4,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
-import { MuiThemeProvider } from '@material-ui/core/styles';
-
-import themes from './assets/muiTheme';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import muiTheme from './assets/muiTheme';
 import configureStore from './store/configureStore.js';
 
+const theme = createMuiTheme(muiTheme);
 const store = configureStore();
 
 function render(Component) {
     ReactDOM.render(
         <Provider store={store}>
-            <MuiThemeProvider theme={themes.dark}>
+            <MuiThemeProvider theme={theme}>
                 <AppContainer>
                     <Component />
                 </AppContainer>

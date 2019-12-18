@@ -1,20 +1,25 @@
 import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
-import * as SessionActions from '../../../actions/login';
-import TextField from '../../ui-component/TextField'
+import Progress from '@material-ui/core/CircularProgress';
+import TextField from '../../ui-component/TextField';
+import Button from '../../ui-component/Button';
 
-import Button from '../../ui-component/Button'
-import styles from './LoginPage.less';
+import * as LoginActions from '../../../actions/login';
+
+import './LoginPage.css';
 
 function LoginPage(props) {
+
     const [userData, setUserData] = useState({
-        email: '',
+        username: '',
         password: ''
     });
+
+    const [isLogin, setIsLogin] = useState(false)
+
     const [err, setErrors] = useState({
-        email: '',
+        username: '',
         password: ''
     });
 
@@ -23,56 +28,53 @@ function LoginPage(props) {
         setErrors({ ...err, [key]: '' });
     }
 
-    function handleSubmit() {
+    function onError(err) {
+        setErrors({ ...err });
+    }
+
+    async function handleSubmit() {
+        setIsLogin(true)
+        await props.login(userData, onError)
+        setIsLogin(false)
     }
 
     return (
-        <div>
-            <div className={styles.LoginPage} />
-            <div className={styles.inputBlock}>
-                <Grid
-                    container
-                    justify='center'
-                    alignItems='center'
+        <div className={'pageWrapper'}>
+            <div className={'inputBlock'}>
+                <TextField
+                    placeholder={'Username'}
+                    fullWidth
+                    value={userData.username}
+                    className={'input'}
+                    onChange={useCallback(e => handleChange('username', e.target.value))}
+                    error={!!err.username}
+                    helperText={err.username}
+                />
+                <TextField
+                    type='password'
+                    placeholder={'Password'}
+                    fullWidth
+                    value={userData.password}
+                    className={'input'}
+                    onChange={useCallback(e => handleChange('password', e.target.value))}
+                    error={!!err.password}
+                    helperText={err.password}
+                />
+                <Button
+                    color='secondary'
+                    fullWidth
+                    className={'input'}
+                    onClick={handleSubmit}
                 >
-
-                    <Grid item xs={12} >
-                        <TextField
-                            type='email'
-                            placeholder={'Email'}
-                            fullWidth
-                            value={userData.email}
-                            className={styles.input}
-                            onChange={useCallback(e => handleChange('email', e.target.value))}
-                            error={!!err.email}
-                            helperText={err.email}
-                        />
-                        <TextField
-                            type='password'
-                            placeholder={'Password'}
-                            fullWidth
-                            value={userData.password}
-                            className={styles.input}
-                            onChange={useCallback(e => handleChange('password', e.target.value))}
-                            error={!!err.password || !!err['data/password']}
-                            helperText={err.password || err['data/password']}
-                        />
-                        <Button
-                            color='secondary'
-                            fullWidth
-                            className={styles.input}
-                            onClick={handleSubmit}
-                        >Login
-                        </Button>
-                    </Grid>
-
-                </Grid>
+                    {isLogin ? <Progress size={35} /> : 'Login'}
+                </Button>
             </div>
         </div>
     );
 }
+
 LoginPage.propTypes = {
     login: PropTypes.func.isRequired
 };
 
-export default connect(state => { return { sessions: state.sessions } }, { ...SessionActions })(LoginPage);
+export default connect(state => { return { login: state.login } }, { ...LoginActions })(LoginPage);
